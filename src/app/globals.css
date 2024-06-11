@@ -27,3 +27,13 @@
   border: solid 1px #d96830;
   box-shadow: 0 2px 5px 0 rgba(217, 104, 48, 0.15);
 }
+
+
+.card-number-frame{
+  border: solid 1px #13395e;
+  border-radius: 3px;
+  width: 100%;
+  margin-bottom: 8px;
+  height: 40px;
+  box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.2);
+}

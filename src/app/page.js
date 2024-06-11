@@ -1,10 +1,12 @@
 "use client"
 
 import { useState } from "react";
-import PaymentFrameSingle from "../../components/PaymentFrameSingle";
+
+import PaymentFrameSingle from "@/components/PaymentFrameSingle";
+import PaymentFrameMultiple from "@/components/PaymentFrameMultiple";
 
 export default function Home() {
-  const [selectedTab, setSelectedTab] = useState(2); // Default to tab 2
+  const [selectedTab, setSelectedTab] = useState(1); // Default to tab 1
 
   const handleTabChange = (tabIndex) => {
     setSelectedTab(tabIndex);
@@ -13,8 +15,8 @@ export default function Home() {
     <main className='mt-24 container'>
       <div className='w-full'>
         <div className='w-full flex justify-between items-start'>
-          <section className='w-1/2'>
-            <h1 className="w-full text-center text-2xl font-bold mb-4">Please select your payment option:</h1>
+          <section className='w-full'>
+            <h1 className="w-full text-center text-2xl font-bold mb-4">Frames Demo</h1>
             <div className='bg-slate-200 rounded-xl p-8'>
               <div className='italic'>
                 <p>
@@ -32,7 +34,7 @@ export default function Home() {
 
                 <input type="radio" name="my_tabs_1" role="tab" className="tab" aria-label="Separate Lines" checked={selectedTab === 2} onChange={() => handleTabChange(2)} />
                 <div role="tabpanel" className="tab-content p-10">
-                  {selectedTab === 2 && 'Tab content 2'}
+                  {selectedTab === 2 && <PaymentFrameMultiple />}
                 </div>
               </div>
 

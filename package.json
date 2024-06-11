@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@checkout.com/checkout-web-components": "^0.5.0-beta",
+    "autoprefixer": "^10.4.19",
     "checkout-sdk-node": "^2.3.6",
     "frames-react": "^1.1.1",
     "next": "14.2.3",

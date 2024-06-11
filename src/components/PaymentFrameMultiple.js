@@ -1,6 +1,6 @@
 "use client"
 
-import { Frames, CardFrame } from 'frames-react';
+import { Frames, CardNumber, ExpiryDate, Cvv } from 'frames-react';
 import { useState } from 'react';
 
 // Documentation: https://github.com/checkout/frames-react
@@ -88,10 +88,12 @@ export default function PaymentFrameSingle(){
                 cardBinChanged={(e) => {console.log('cardBinChanged', e);}}
             >
 
-                <CardFrame />
+                <CardNumber />
+                <ExpiryDate />
+                <Cvv />
 
                 <button
-                    className='border-none rounded px-4 py-2 text-white font-medium w-full bg-grey shadow-[0_1px_3px_0_rgba(19,57,94,0.4)] hover:bg-[#272932] active:bg-[#0b2a49] cursor-pointer'
+                    className='btn btn-primary'
                     onClick={() => {
                         Frames.submitCard();
                     }}
@@ -100,7 +102,7 @@ export default function PaymentFrameSingle(){
                 </button>
 
                 <button
-                    className='border-none rounded px-4 py-2 text-white font-medium w-full bg-grey shadow-[0_1px_3px_0_rgba(19,57,94,0.4)] hover:bg-[#272932] active:bg-[#0b2a49] cursor-pointer'
+                    className='btn btn-neutral'
                     onClick={checkCardValid}
                 >
                     Is card valid?
@@ -110,7 +112,7 @@ export default function PaymentFrameSingle(){
                 </div>
 
                 <button
-                    className='border-none rounded px-4 py-2 text-white font-medium w-full bg-grey shadow-[0_1px_3px_0_rgba(19,57,94,0.4)] hover:bg-[#272932] active:bg-[#0b2a49] cursor-pointer'
+                    className='btn btn-neutral'
                     onClick={handleEnable}
                 >
                     enableSubmitForm

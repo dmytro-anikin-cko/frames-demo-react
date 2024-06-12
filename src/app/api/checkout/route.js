@@ -18,7 +18,7 @@ export async function POST(request, response) {
       },
       processing_channel_id: process.env.PROCESSING_CHANNEL_ID,
       "3ds": {
-        enabled: true, // doesn't work with 'true' (works only when providing 'eci', 'cryptogram', etc.). Error code: 'no_processor_configured_for_card_scheme'. 
+        enabled: true, // For Cartes Bancaires, doesn't work with 'true' (works only when providing 'eci', 'cryptogram', etc.). Error code: 'no_processor_configured_for_card_scheme'. 
       },
       currency: "EUR",
       amount: 3399,
@@ -33,8 +33,28 @@ export async function POST(request, response) {
       };
     }
 
+    // ------------------------------------ Method 1: SDK (START) ------------------------------------
     const paymentResponse = await cko.payments.request(paymentRequest);
     console.log(paymentResponse);
+    
+    // ------------------------------------ Method 1: SDK (END) ------------------------------------
+
+
+    // ------------------------------------ Method 2: Fetch (START) ------------------------------------
+
+    // const paymentResponse = await fetch('https://api.sandbox.checkout.com/payments', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Bearer ${process.env.SECRET_KEY}`, // Replace YOUR_SECRET_KEY with your actual Checkout.com secret key
+    //   },
+    //   body: JSON.stringify(paymentRequest),
+    // });
+
+    // const paymentData = await paymentResponse.json();
+    // ------------------------------------ Method 2: Fetch (END) ------------------------------------
+
+
     // Send the payment response back to the client
     return NextResponse.json(paymentResponse);
   } catch (error) {

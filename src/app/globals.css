@@ -2,13 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-.card-frame {
+
+.card-frame, .card-number-frame, .expiry-date-frame, .cvv-frame{
   border: solid 1px #13395e;
   border-radius: 3px;
   width: 100%;
   margin-bottom: 8px;
   height: 40px;
   box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.2);
+  @apply input; 
+  @apply input-bordered;
 }
 
 .card-frame.frame--rendered {
@@ -29,11 +32,6 @@
 }
 
 
-.card-number-frame{
-  border: solid 1px #13395e;
-  border-radius: 3px;
-  width: 100%;
-  margin-bottom: 8px;
-  height: 40px;
-  box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.2);
-}
+
+
+

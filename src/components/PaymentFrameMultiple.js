@@ -92,31 +92,34 @@ export default function PaymentFrameSingle(){
                 <ExpiryDate />
                 <Cvv />
 
-                <button
-                    className='btn btn-primary'
-                    onClick={() => {
-                        Frames.submitCard();
-                    }}
-                >
-                    PAY 
-                </button>
+                <div className='flex flex-col'>
+                    <button
+                        className='btn btn-primary my-4'
+                        onClick={() => {
+                            Frames.submitCard();
+                        }}
+                    >
+                        PAY 
+                    </button>
 
-                <button
-                    className='btn btn-neutral'
-                    onClick={checkCardValid}
-                >
-                    Is card valid?
-                </button>
-                <div>
-                    {isCardValid === null ? '' : isCardValid ? 'Card is valid' : 'Card is invalid'}
+                    <button
+                        className='btn btn-neutral mb-4'
+                        onClick={checkCardValid}
+                    >
+                        Is card valid?
+                    </button>
+                    <div>
+                        {isCardValid === null ? '' : isCardValid ? 'Card is valid' : 'Card is invalid'}
+                    </div>
+
+                    <button
+                        className='btn btn-neutral mb-4'
+                        onClick={handleEnable}
+                    >
+                        enableSubmitForm
+                    </button>
                 </div>
 
-                <button
-                    className='btn btn-neutral'
-                    onClick={handleEnable}
-                >
-                    enableSubmitForm
-                </button>
             </Frames>
         </div>
 

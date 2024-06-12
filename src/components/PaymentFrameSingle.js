@@ -8,6 +8,7 @@ import { useState } from 'react';
 export default function PaymentFrameSingle(){
 
     const [isCardValid, setIsCardValid] = useState(null)
+    const [cardholder, setCardholder] = useState(null);
 
     const checkCardValid = () => {
         const valid = Frames.isCardValid();
@@ -62,7 +63,10 @@ export default function PaymentFrameSingle(){
                     publicKey: 'pk_sbox_ffrilzleqqiso6zphoa6dmpr7eo', // Use your own public key
                     localization:'EN-GB',
                     frameSelector: '.card-frame',
-                    schemeChoice: true
+                    schemeChoice: true,
+                    cardholder: {
+                        name: cardholder
+                    }
                 }}
                 // Triggered after a card is tokenized.
                 cardTokenized={requestPayment}
@@ -87,34 +91,42 @@ export default function PaymentFrameSingle(){
                 // Triggered when the user inputs or changes the first 8 digits of a card.
                 cardBinChanged={(e) => {console.log('cardBinChanged', e);}}
             >
+                <div className='w-full flex flex-col'>
+                    <input type="text" placeholder="Cardholder Name" className="input input-bordered w-full mb-4" onChange={(e) => setCardholder(e.target.value)} />
+                </div>
+
 
                 <CardFrame />
 
-                <button
-                    className='btn btn-primary'
-                    onClick={() => {
-                        Frames.submitCard();
-                    }}
-                >
-                    PAY 
-                </button>
+                <div className='flex flex-col'>
+                    <button
+                        className='btn btn-primary my-4'
+                        onClick={() => {
+                            Frames.submitCard();
+                        }}
+                    >
+                        PAY 
+                    </button>
 
-                <button
-                    className='btn btn-neutral'
-                    onClick={checkCardValid}
-                >
-                    Is card valid?
-                </button>
-                <div>
-                    {isCardValid === null ? '' : isCardValid ? 'Card is valid' : 'Card is invalid'}
+                    <button
+                        className='btn btn-neutral mb-4'
+                        onClick={checkCardValid}
+                    >
+                        Is card valid?
+                    </button>
+                    <div>
+                        {isCardValid === null ? '' : isCardValid ? 'Card is valid' : 'Card is invalid'}
+                    </div>
+
+                    <button
+                        className='btn btn-neutral mb-4'
+                        onClick={handleEnable}
+                    >
+                        enableSubmitForm
+                    </button>
                 </div>
 
-                <button
-                    className='btn btn-neutral'
-                    onClick={handleEnable}
-                >
-                    enableSubmitForm
-                </button>
+
             </Frames>
         </div>
 

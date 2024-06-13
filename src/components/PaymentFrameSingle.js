@@ -30,7 +30,7 @@ export default function PaymentFrameSingle(){
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ token: event.token, preferred_scheme: event.preferred_scheme }),
+                body: JSON.stringify({ source: {type: "token", token: event.token}, preferred_scheme: event.preferred_scheme, name: event.name }),
             });
 
             const paymentResult = await response.json();
@@ -39,9 +39,7 @@ export default function PaymentFrameSingle(){
             if(!response.ok){
                 alert(`Payment processing failed💥 ${paymentResult.error.error_codes[0]}`);
                 return;
-            } else {
-                alert('Payment processed successfully!✅');
-            }
+            } 
 
             console.log(paymentResult);
 

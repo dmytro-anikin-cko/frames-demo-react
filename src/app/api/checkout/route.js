@@ -5,27 +5,28 @@ import { NextResponse } from "next/server";
 // Get Started: https://www.checkout.com/docs/get-started
 export async function POST(request, response) {
   const body = await request.json();
-  console.log(body);
-  const { token, preferred_scheme } = body; // Get the token from the request body
+  // console.log(body);
+  const { source, preferred_scheme, name } = body; // Get the token from the request body
 
   const cko = new Checkout(process.env.SECRET_KEY);
 
   try {
     let paymentRequest = {
-      source: {
-        type: "token",
-        token, // The token received from the client-side Frames
-      },
+      source,
       processing_channel_id: process.env.PROCESSING_CHANNEL_ID,
       "3ds": {
         enabled: true, // For Cartes Bancaires, doesn't work with 'true' (works only when providing 'eci', 'cryptogram', etc.). Error code: 'no_processor_configured_for_card_scheme'. 
       },
       currency: "EUR",
       amount: 3399,
+      customer: {
+        name: name
+      },
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-success`,
       failure_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-failure`,
     };
-
+    // console.log(paymentRequest);
+    
     // Conditionally add the processing field if preferred_scheme exists and is not empty
     if (preferred_scheme && preferred_scheme.trim() !== "") {
       paymentRequest.processing = {

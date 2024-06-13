@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import PaymentFrameSingle from "@/components/PaymentFrameSingle";
 import PaymentFrameMultiple from "@/components/PaymentFrameMultiple";
+import OneClickPayment from "@/components/OneClickPayment";
 
 export default function Home() {
   const [selectedTab, setSelectedTab] = useState(1); // Default to tab 1
@@ -14,7 +15,7 @@ export default function Home() {
   return (
     <main className='mt-24 container'>
       <div className='w-full'>
-        <div className='w-full flex justify-between items-start'>
+        <div className='w-full flex flex-col justify-center items-center'>
           <section className='w-full'>
             <h1 className="w-full text-center text-2xl font-bold mb-4">Frames Demo</h1>
             <div className='bg-slate-200 rounded-xl p-8'>
@@ -37,8 +38,10 @@ export default function Home() {
                   {selectedTab === 2 && <PaymentFrameMultiple />}
                 </div>
               </div>
-
             </div>
+          </section>
+          <section className="oneClick">
+            <OneClickPayment />
           </section>
         </div>
       </div>

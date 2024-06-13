@@ -8,6 +8,8 @@ import { useState } from 'react';
 export default function PaymentFrameSingle(){
 
     const [isCardValid, setIsCardValid] = useState(null)
+    const [cardholder, setCardholder] = useState(null);
+
 
     const checkCardValid = () => {
         const valid = Frames.isCardValid();
@@ -29,7 +31,7 @@ export default function PaymentFrameSingle(){
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ token: event.token, preferred_scheme: event.preferred_scheme }),
+                body: JSON.stringify({ source: {type: "token", token: event.token}, preferred_scheme: event.preferred_scheme, name: event.name }),
             });
 
             const paymentResult = await response.json();
@@ -38,9 +40,7 @@ export default function PaymentFrameSingle(){
             if(!response.ok){
                 alert(`Payment processing failed💥 ${paymentResult.error.error_codes[0]}`);
                 return;
-            } else {
-                alert('Payment processed successfully!✅');
-            }
+            } 
 
             console.log(paymentResult);
 
@@ -62,7 +62,10 @@ export default function PaymentFrameSingle(){
                     publicKey: 'pk_sbox_ffrilzleqqiso6zphoa6dmpr7eo', // Use your own public key
                     localization:'EN-GB',
                     frameSelector: '.card-frame',
-                    schemeChoice: true
+                    schemeChoice: true,
+                    cardholder: {
+                        name: cardholder
+                    }
                 }}
                 // Triggered after a card is tokenized.
                 cardTokenized={requestPayment}
@@ -87,6 +90,10 @@ export default function PaymentFrameSingle(){
                 // Triggered when the user inputs or changes the first 8 digits of a card.
                 cardBinChanged={(e) => {console.log('cardBinChanged', e);}}
             >
+
+                <div className='w-full flex flex-col'>
+                    <input type="text" placeholder="Cardholder Name" className="input input-bordered w-full mb-4" onChange={(e) => setCardholder(e.target.value)} />
+                </div>
 
                 <CardNumber />
                 <ExpiryDate />

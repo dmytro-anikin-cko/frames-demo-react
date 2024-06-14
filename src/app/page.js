@@ -5,6 +5,7 @@ import { useState } from "react";
 import PaymentFrameSingle from "@/components/PaymentFrameSingle";
 import PaymentFrameMultiple from "@/components/PaymentFrameMultiple";
 import OneClickPayment from "@/components/OneClickPayment";
+import VerifyCard from "@/components/VerifyCard";
 
 export default function Home() {
   const [selectedTab, setSelectedTab] = useState(1); // Default to tab 1
@@ -41,7 +42,14 @@ export default function Home() {
             </div>
           </section>
           <section className="oneClick">
-            <OneClickPayment />
+            <div className="flex flex-col">
+              <div className="mb-4">
+                <OneClickPayment />
+              </div>
+              <div>
+                <VerifyCard />
+              </div>
+            </div>
           </section>
         </div>
       </div>

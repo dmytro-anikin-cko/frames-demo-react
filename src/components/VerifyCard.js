@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function OneClickPayment() {
+export default function VerifyCard() {
   const [loading, setLoading] = useState(false);
 
   const getSource = async () => {
@@ -23,12 +23,12 @@ export default function OneClickPayment() {
     const data = await response.json();
     const { sourceId } = data;
 
-    requestPayment(sourceId);
+    verifyCard(sourceId);
   };
 
-  const requestPayment = async (sourceId) => {
+  const verifyCard = async (sourceId) => {
     try {
-      const response = await fetch("/api/checkout", {
+      const response = await fetch("/api/verifyCard", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,7 +42,7 @@ export default function OneClickPayment() {
       // If 500
       if (!response.ok) {
         alert(
-          `Payment failed💥 ${paymentResult.error.error_codes[0]}`
+          `Card verification failed💥 ${paymentResult.error.error_codes[0]}`
         );
         return;
       }
@@ -51,7 +51,13 @@ export default function OneClickPayment() {
 
       if (paymentResult.requiresRedirect && paymentResult.redirectLink) {
         // Redirect the user to the 3D Secure page
-        window.location.href = paymentResult.redirectLink;
+        // window.location.href = paymentResult.redirectLink;
+              // Open the redirect link in a new small window
+        const newWindow = window.open(
+            paymentResult.redirectLink, 
+            '3DSecureWindow', 
+            'width=600,height=400,left=100,top=100'
+        );
 
         // Check if the window was blocked by a popup blocker
         if (newWindow) {
@@ -61,8 +67,8 @@ export default function OneClickPayment() {
         }
       }
     } catch (error) {
-      console.error("Payment error:", error);
-      alert("Payment failed💥");
+      console.error("Card verification error:", error);
+      alert("Card verification failed💥");
     }
   };
 
@@ -79,7 +85,7 @@ export default function OneClickPayment() {
         onClick={handlePayment}
         disabled={loading}
       >
-        {loading ? "Processing..." : "One-Click Payment"}
+        {loading ? "Processing..." : "Verify Card"}
       </button>
     </div>
   );

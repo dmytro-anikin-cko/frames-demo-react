@@ -1,7 +1,7 @@
 "use client"
 
 import { Frames, CardFrame } from 'frames-react';
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 // Documentation: https://github.com/checkout/frames-react
 // Get Started: https://www.checkout.com/docs/get-started
@@ -9,6 +9,8 @@ export default function PaymentFrameSingle(){
 
     const [isCardValid, setIsCardValid] = useState(null)
     const [cardholder, setCardholder] = useState(null);
+    const [paymentAmount, setPaymentAmount] = useState(null);
+    const amountRef = useRef(null);
 
     const checkCardValid = () => {
         const valid = Frames.isCardValid();
@@ -21,7 +23,9 @@ export default function PaymentFrameSingle(){
     }
 
     // Function to handle tokenization success
-    const requestPayment = async (event) => {
+    const requestPayment = async (event, amountValue) => {
+        console.log('Triggered');
+        // Cannot get any state here --> returns null
         try {
 
             console.log(event);
@@ -30,7 +34,7 @@ export default function PaymentFrameSingle(){
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ source: {type: "token", token: event.token}, preferred_scheme: event.preferred_scheme, name: event.name }),
+                body: JSON.stringify({ source: {type: "token", token: event.token}, amount: amountValue, preferred_scheme: event.preferred_scheme, name: event.name }),
             });
 
             const paymentResult = await response.json();
@@ -54,6 +58,11 @@ export default function PaymentFrameSingle(){
         }
     };
 
+    useEffect(() => {
+        console.log('Amount updated:', paymentAmount);
+        amountRef.current = paymentAmount; // Update the ref whenever the state changes
+      }, [paymentAmount]);
+
     return (
         <div className='w-1/2 h-auto'>
             <Frames
@@ -67,7 +76,10 @@ export default function PaymentFrameSingle(){
                     }
                 }}
                 // Triggered after a card is tokenized.
-                cardTokenized={requestPayment}
+                cardTokenized={event => {
+                    console.log("cardTokenized", event, amountRef.current);
+                    requestPayment(event, amountRef.current)
+                }}
                 // Triggered when Frames is registered on the global namespace and safe to use.
                 ready={() => {console.log('Frame is ready');}}
                 // Triggered when the form is rendered.
@@ -89,10 +101,13 @@ export default function PaymentFrameSingle(){
                 // Triggered when the user inputs or changes the first 8 digits of a card.
                 cardBinChanged={(e) => {console.log('cardBinChanged', e);}}
             >
+
+                <div className='w-full flex flex-col'>
+                    <input type="text" placeholder="Amount to Charge" className="input input-bordered w-full mb-4" onChange={(e) => setPaymentAmount(e.target.value)} />
+                </div>
                 <div className='w-full flex flex-col'>
                     <input type="text" placeholder="Cardholder Name" className="input input-bordered w-full mb-4" onChange={(e) => setCardholder(e.target.value)} />
                 </div>
-
 
                 <CardFrame />
 
@@ -100,6 +115,7 @@ export default function PaymentFrameSingle(){
                     <button
                         className='btn btn-primary my-4'
                         onClick={() => {
+                            console.log("submitCard");
                             Frames.submitCard();
                         }}
                     >

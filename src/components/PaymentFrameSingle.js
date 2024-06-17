@@ -9,6 +9,7 @@ export default function PaymentFrameSingle() {
   const [isCardValid, setIsCardValid] = useState(null);
   const [cardholder, setCardholder] = useState(null);
   const [paymentAmount, setPaymentAmount] = useState(null);
+  const [debugMode, setDebugMode] = useState(false);
   const amountRef = useRef(null);
 
   const checkCardValid = () => {
@@ -19,6 +20,67 @@ export default function PaymentFrameSingle() {
   const handleEnable = () => {
     Frames.enableSubmitForm();
     console.log("Form re-enabled for submission");
+  };
+
+  const handleDebugMode = () => {
+    setDebugMode((prev) => {
+      const newDebugMode = !prev;
+      Frames.init({
+        publicKey: "pk_sbox_ffrilzleqqiso6zphoa6dmpr7eo", // Use your own public key
+        // Note: all fields must be present
+        localization: {
+            cardNumberPlaceholder: "•••• •••• •••• ••••",
+            expiryMonthPlaceholder: "MM",
+            expiryYearPlaceholder: "YY",
+            cvvPlaceholder: "•••",
+        },
+        frameSelector: ".card-frame",
+        schemeChoice: true,
+        acceptedPaymentMethods: ["Visa", "Mastercard", "Cartes Bancaires"],
+        cardholder: {
+          name: cardholder,
+        },
+        debug: newDebugMode, // Set debug mode based on parameter
+        // Event handlers
+        cardTokenized: (event) => {
+          console.log("cardTokenized", event, amountRef.current);
+          requestPayment(event, amountRef.current);
+        },
+        ready: () => {
+          console.log("Frame is ready");
+        },
+        frameActivated: (e) => {
+          console.log("frameActivated", e);
+        },
+        frameFocus: (e) => {
+          console.log("frameFocus", e);
+        },
+        frameBlur: (e) => {
+          console.log("frameBlur", e);
+        },
+        frameValidationChanged: (e) => {
+          console.log("frameValidationChanged", e);
+        },
+        paymentMethodChanged: (e) => {
+          console.log("paymentMethodChanged", e);
+        },
+        cardValidationChanged: (e) => {
+          console.log("cardValidationChanged", e);
+        },
+        cardSubmitted: () => {
+          console.log("cardSubmitted");
+        },
+        cardTokenizationFailed: (e) => {
+          console.log("cardTokenizationFailed", e);
+          handleEnable(); // Enable the form for resubmission
+        },
+        cardBinChanged: (e) => {
+          console.log("cardBinChanged", e);
+        },
+      });
+      console.log("Frames re-initialized with debug mode:", newDebugMode);
+      return newDebugMode;
+    });
   };
 
   // Function to handle tokenization success
@@ -71,17 +133,32 @@ export default function PaymentFrameSingle() {
 
   return (
     <div className="w-full h-auto">
+      <div className="flex items-center my-4">
+        <label className="mr-2">Debug Mode</label>
+        <input
+          type="checkbox"
+          className="toggle"
+          checked={debugMode}
+          onChange={handleDebugMode}
+        />
+      </div>
+
       <Frames
         config={{
           publicKey: "pk_sbox_ffrilzleqqiso6zphoa6dmpr7eo", // Use your own public key
-          localization: "EN-GB",
           frameSelector: ".card-frame",
           schemeChoice: true,
           acceptedPaymentMethods: ["Visa", "Mastercard", "Cartes Bancaires"],
           cardholder: {
             name: cardholder,
           },
-          // debug: true
+          // Note: all fields must be present
+          localization: {
+            cardNumberPlaceholder: "•••• •••• •••• ••••",
+            expiryMonthPlaceholder: "MM",
+            expiryYearPlaceholder: "YY",
+            cvvPlaceholder: "•••",
+          },
         }}
         // Triggered after a card is tokenized.
         cardTokenized={(event) => {
@@ -115,6 +192,7 @@ export default function PaymentFrameSingle() {
         // Triggered when the state of the card validation changes.
         cardValidationChanged={(e) => {
           console.log("cardValidationChanged", e);
+          setIsCardValid(e.isValid); // Update isCardValid state
         }}
         // Triggered when the card form has been submitted.
         cardSubmitted={() => {
@@ -157,6 +235,7 @@ export default function PaymentFrameSingle() {
               console.log("submitCard");
               Frames.submitCard();
             }}
+            disabled={!isCardValid}
           >
             PAY
           </button>
@@ -172,10 +251,7 @@ export default function PaymentFrameSingle() {
               : "Card is invalid"}
           </div>
 
-          <button
-            className="btn btn-neutral mb-4"
-            onClick={handleEnable}
-          >
+          <button className="btn btn-neutral mb-4" onClick={handleEnable}>
             Re-enable Form
           </button>
         </div>

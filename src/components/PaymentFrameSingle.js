@@ -71,9 +71,11 @@ export default function PaymentFrameSingle(){
                     localization:'EN-GB',
                     frameSelector: '.card-frame',
                     schemeChoice: true,
+                    acceptedPaymentMethods: ['Visa', 'Mastercard', 'Cartes Bancaires'],
                     cardholder: {
                         name: cardholder
-                    }
+                    },
+                    // debug: true
                 }}
                 // Triggered after a card is tokenized.
                 cardTokenized={event => {

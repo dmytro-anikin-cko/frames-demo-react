@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Loader from '@/UI/Loader';
+import Link from 'next/link';
 
 export default function PaymentSuccess() {
   const [paymentDetails, setPaymentDetails] = useState(null);
@@ -46,6 +47,7 @@ export default function PaymentSuccess() {
       {paymentDetails && (
         <div>
           <p>Thank you for your order number {paymentDetails.reference}, you paid with your {paymentDetails.source.scheme} ending in {paymentDetails.source.last4}.</p>
+          <p><Link className="link link-primary" href="/">Home</Link></p>
         </div>
       )}
     </div>

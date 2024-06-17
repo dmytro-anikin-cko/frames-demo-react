@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Loader from '@/UI/Loader';
 import Link from 'next/link';
 
@@ -9,7 +9,6 @@ export default function PaymentSuccess() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   useEffect(() => {
     const fetchPaymentDetails = async (sessionId) => {

@@ -14,10 +14,10 @@ export default function Home() {
     setSelectedTab(tabIndex);
   };
   return (
-    <main className='mt-24 container'>
+    <main className='w-full mt-24 container'>
       <div className='w-full'>
-        <div className='w-full flex flex-col justify-center items-center'>
-          <section className='w-full'>
+        <div className='w-full'>
+          <section className='w-full flex flex-col justify-center items-center'>
             <h1 className="w-full text-center text-2xl font-bold mb-4">Frames Demo</h1>
             <div className='bg-slate-200 rounded-xl p-8'>
               <div className='italic'>
@@ -26,7 +26,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className='my-4 pb-4 border-b-2 border-gray-300'>
+            <div className='w-full my-4 pb-4 border-b-2 border-gray-300'>
 
               <div role="tablist" className="tabs tabs-bordered">
                 <input type="radio" name="my_tabs_1" role="tab" className="tab" aria-label="Single Line" checked={selectedTab === 1} onChange={() => handleTabChange(1)} />

@@ -6,20 +6,28 @@ import { useSearchParams } from 'next/navigation';
 import Loader from '@/UI/Loader';
 import Link from 'next/link';
 
-async function fetchPaymentDetails(sessionId) {
-  const response = await fetch(`/api/getPaymentDetails?cko-session-id=${sessionId}`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch payment details');
-  }
-  return response.json();
-}
-
 export default function PaymentSuccessPage() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('cko-session-id');
   const [paymentDetails, setPaymentDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  async function fetchPaymentDetails(sessionId) {
+    const response = await fetch(`/api/getPaymentDetails`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sessionId
+      }),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch payment details');
+    }
+    return response.json();
+  }
 
   useEffect(() => {
     if (sessionId) {

@@ -1,9 +1,13 @@
 import { Checkout } from "checkout-sdk-node";
 import { NextResponse } from "next/server";
 
-export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const sessionId = searchParams.get("cko-session-id");
+export async function POST(request, response) {
+  // const { searchParams } = new URL(request.url);
+  // const sessionId = searchParams.get("cko-session-id");
+
+  const body = await request.json();
+  console.log(body);
+  const { sessionId } = body; 
 
   const cko = new Checkout(process.env.SECRET_KEY);
 

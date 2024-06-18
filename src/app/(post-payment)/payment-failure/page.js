@@ -1,37 +1,37 @@
+// app/(post-payment)/payment-success/page.js
 "use client"
+
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Loader from '@/UI/Loader';
 import Link from 'next/link';
 
-export default function PaymentSuccess() {
+async function fetchPaymentDetails(sessionId) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getPaymentDetails?cko-session-id=${sessionId}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch payment details');
+  }
+  return response.json();
+}
+
+export default function PaymentSuccessPage() {
+  const searchParams = useSearchParams();
+  const sessionId = searchParams.get('cko-session-id');
   const [paymentDetails, setPaymentDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const searchParams = useSearchParams();
 
   useEffect(() => {
-    const fetchPaymentDetails = async (sessionId) => {
-      try {
-        const response = await fetch(`/api/getPaymentDetails?cko-session-id=${sessionId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch payment details');
-        }
-        const data = await response.json();
-        console.log(data);
-        setPaymentDetails(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const sessionId = searchParams.get('cko-session-id');
     if (sessionId) {
-      fetchPaymentDetails(sessionId);
+      fetchPaymentDetails(sessionId)
+        .then(setPaymentDetails)
+        .catch((error) => setError(error.message))
+        .finally(() => setLoading(false));
+    } else {
+      setError('Session ID not provided');
+      setLoading(false);
     }
-  }, [searchParams]);
+  }, [sessionId]);
 
   if (loading) {
     return <Loader />;

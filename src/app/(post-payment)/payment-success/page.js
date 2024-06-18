@@ -1,12 +1,12 @@
 // app/(post-payment)/payment-success/page.js
 "use client"
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Loader from '@/UI/Loader';
 import Link from 'next/link';
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessComponent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('cko-session-id');
   const [paymentDetails, setPaymentDetails] = useState(null);
@@ -59,5 +59,13 @@ export default function PaymentSuccessPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <PaymentSuccessComponent />
+    </Suspense>
   );
 }

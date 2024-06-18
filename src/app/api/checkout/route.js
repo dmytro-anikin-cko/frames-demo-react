@@ -8,13 +8,15 @@ const generateRandomAmount = () => {
 // Documentation: https://github.com/checkout/frames-react
 // Get Started: https://www.checkout.com/docs/get-started
 export async function POST(request, response) {
-  const body = await request.json();
-  console.log(body);
-  const { source, amount, preferred_scheme, name } = body; // Get the token from the request body
-
-  const cko = new Checkout(process.env.SECRET_KEY);
 
   try {
+
+    const body = await request.json();
+    console.log(body);
+    const { source, amount, preferred_scheme, name } = body; // Get the token from the request body
+  
+    const cko = new Checkout(process.env.SECRET_KEY);
+
     let paymentRequest = {
       source,
       processing_channel_id: process.env.PROCESSING_CHANNEL_ID,

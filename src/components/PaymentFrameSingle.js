@@ -103,6 +103,8 @@ export default function PaymentFrameSingle() {
       });
 
       const paymentResult = await response.json();
+      console.log(paymentResult);
+
 
       // If 500
       if (!response.ok) {
@@ -113,7 +115,6 @@ export default function PaymentFrameSingle() {
         return;
       }
 
-      console.log(paymentResult);
 
       if (paymentResult.requiresRedirect && paymentResult.redirectLink) {
         // Redirect the user to the 3D Secure page

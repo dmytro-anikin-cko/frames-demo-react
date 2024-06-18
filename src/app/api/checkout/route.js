@@ -64,7 +64,7 @@ export async function POST(request, response) {
     // Send the payment response back to the client
     return NextResponse.json(paymentResponse);
   } catch (error) {
-    console.log(error.body);
+    console.log("Error on the server:", error.body);
     return NextResponse.json({ error: error.body }, { status: 500 });
   }
 }

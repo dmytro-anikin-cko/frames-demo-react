@@ -121,7 +121,7 @@ export default function PaymentFrameSingle() {
       }
     } catch (error) {
       console.error("Payment processing error:", error);
-      alert("Payment processing failed💥");
+      alert("Payment processing failed💥", error);
       handleEnable();
     }
   };

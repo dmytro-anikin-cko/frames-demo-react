@@ -7,7 +7,7 @@ import Loader from '@/UI/Loader';
 import Link from 'next/link';
 
 async function fetchPaymentDetails(sessionId) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getPaymentDetails?cko-session-id=${sessionId}`);
+  const response = await fetch(`/api/getPaymentDetails?cko-session-id=${sessionId}`);
   if (!response.ok) {
     throw new Error('Failed to fetch payment details');
   }

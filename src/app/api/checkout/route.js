@@ -8,8 +8,8 @@ const generateRandomAmount = () => {
 // Documentation: https://github.com/checkout/frames-react
 // Get Started: https://www.checkout.com/docs/get-started
 export async function POST(request, response) {
-  console.log("Test log Processing Channel ID:", process.env.PROCESSING_CHANNEL_ID);
-  console.log("Test log Secret Key:", process.env.SECRET_KEY);
+  console.log("Processing Channel ID:", process.env.PROCESSING_CHANNEL_ID);
+  console.log("Secret Key:", process.env.SECRET_KEY);
   try {
 
     const body = await request.json();

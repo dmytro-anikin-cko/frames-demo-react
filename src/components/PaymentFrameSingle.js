@@ -26,7 +26,7 @@ export default function PaymentFrameSingle() {
     setDebugMode((prev) => {
       const newDebugMode = !prev;
       Frames.init({
-        publicKey: "pk_sbox_ffrilzleqqiso6zphoa6dmpr7eo", // Use your own public key
+        publicKey: "pk_sbox_guri7tp655hvceb3qaglozm7gee", // Use your own public key
         // Note: all fields must be present
         localization: {
             cardNumberPlaceholder: "•••• •••• •••• ••••",
@@ -146,7 +146,7 @@ export default function PaymentFrameSingle() {
 
       <Frames
         config={{
-          publicKey: "pk_sbox_ffrilzleqqiso6zphoa6dmpr7eo", // Use your own public key
+          publicKey: "pk_sbox_guri7tp655hvceb3qaglozm7gee", // Use your own public key
           frameSelector: ".card-frame",
           schemeChoice: true,
           acceptedPaymentMethods: ["Visa", "Mastercard", "Cartes Bancaires"],

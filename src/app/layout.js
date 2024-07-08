@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* <script src="https://cdn.checkout.com/js/framesv2.min.js" async></script> */}
+        {/* CKO Frames CDN */}
         <Script strategy="beforeInteractive" src="https://cdn.checkout.com/js/framesv2.min.js" />
       </head>
       <body>{children}</body>

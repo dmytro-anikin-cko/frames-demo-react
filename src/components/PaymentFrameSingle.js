@@ -2,6 +2,7 @@
 
 import { Frames, CardFrame } from "frames-react";
 import { useEffect, useState, useRef } from "react";
+import GooglePayBtn from "./GooglePayBtn";
 
 // Documentation: https://github.com/checkout/frames-react
 // Get Started: https://www.checkout.com/docs/get-started
@@ -257,6 +258,8 @@ export default function PaymentFrameSingle() {
           </button>
         </div>
       </Frames>
+
+      <GooglePayBtn />
     </div>
   );
 }

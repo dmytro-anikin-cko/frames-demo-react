@@ -13,6 +13,9 @@ export default function RootLayout({ children }) {
       <head>
         {/* CKO Frames CDN */}
         <Script strategy="beforeInteractive" src="https://cdn.checkout.com/js/framesv2.min.js" />
+
+        {/* Klarna JS SDK */}
+        <Script strategy="beforeInteractive" src="https://x.klarnacdn.net/kp/lib/v1/api.js" />
       </head>
       <body>{children}</body>
     </html>

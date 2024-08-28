@@ -3,6 +3,7 @@
 import { Frames, CardFrame } from "frames-react";
 import { useEffect, useState, useRef } from "react";
 import GooglePayBtn from "./GooglePayBtn";
+// import { Klarna } from "checkout-sdk-node";
 
 // Documentation: https://github.com/checkout/frames-react
 // Get Started: https://www.checkout.com/docs/get-started
@@ -11,6 +12,7 @@ export default function PaymentFrameSingle() {
   const [cardholder, setCardholder] = useState(null);
   const [paymentAmount, setPaymentAmount] = useState(null);
   const [debugMode, setDebugMode] = useState(false);
+  const [klarnaClientToken, setKlarnaClientToken] = useState(null);
   const amountRef = useRef(null);
 
   const checkCardValid = () => {
@@ -30,10 +32,10 @@ export default function PaymentFrameSingle() {
         publicKey: "pk_sbox_guri7tp655hvceb3qaglozm7gee", // Use your own public key
         // Note: all fields must be present
         localization: {
-            cardNumberPlaceholder: "•••• •••• •••• ••••",
-            expiryMonthPlaceholder: "MM",
-            expiryYearPlaceholder: "YY",
-            cvvPlaceholder: "•••",
+          cardNumberPlaceholder: "•••• •••• •••• ••••",
+          expiryMonthPlaceholder: "MM",
+          expiryYearPlaceholder: "YY",
+          cvvPlaceholder: "•••",
         },
         frameSelector: ".card-frame",
         schemeChoice: true,
@@ -84,6 +86,121 @@ export default function PaymentFrameSingle() {
     });
   };
 
+  const getPaymentContext = async () => {
+    try {
+      const response = await fetch("/api/getPaymentContext", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch payment context");
+      }
+
+      const paymentContext = await response.json();
+      console.log("Payment Context received:", paymentContext);
+
+      // Store the client token in state
+      setKlarnaClientToken(paymentContext.partner_metadata.client_token);
+    } catch (error) {
+      console.error("Error getting Payment Context:", error);
+      alert("Getting Payment Context failed💥", error);
+    }
+  };
+
+  useEffect(() => {
+    getPaymentContext();
+  }, []);
+
+  const loadKlarna = () => {
+    if (!klarnaClientToken) {
+      console.error("Klarna client token not available");
+      return;
+    }
+
+    // Check if Klarna is available in the global scope
+    if (typeof Klarna === "undefined") {
+      console.error("Klarna SDK not loaded");
+      return;
+    }
+
+    try {
+      Klarna.Payments.init({
+        client_token: klarnaClientToken,
+      });
+
+      Klarna.Payments.load(
+        {
+          container: "#klarna-payments-container",
+          payment_method_category: 'pay_later'
+        },
+        {
+          purchase_country: "GB",
+          purchase_currency: "GBP",
+          locale: "en-GB",
+          billing_address: {
+            given_name: "John",
+            family_name: "Doe",
+            email: "john@doe.com",
+            title: "Mr",
+            street_address: "13 New Burlington St",
+            street_address2: "Apt 214",
+            postal_code: "W13 3BG",
+            city: "London",
+            region: "",
+            phone: "01895808221",
+            country: "GB",
+          },
+          shipping_address: {
+            given_name: "John",
+            family_name: "Doe",
+            email: "john@doe.com",
+            title: "Mr",
+            street_address: "13 New Burlington St",
+            street_address2: "Apt 214",
+            postal_code: "W13 3BG",
+            city: "London",
+            region: "",
+            phone: "01895808221",
+            country: "GB",
+          },
+          order_amount: 10,
+          order_tax_amount: 0,
+          order_lines: [
+            {
+              type: "physical",
+              reference: "19-402",
+              name: "Battery Power Pack",
+              quantity: 1,
+              unit_price: 10,
+              tax_rate: 0,
+              total_amount: 10,
+              total_discount_amount: 0,
+              total_tax_amount: 0,
+              product_url: "https://www.estore.com/products/f2a8d7e34",
+              image_url: "https://www.exampleobjects.com/logo.png",
+            },
+          ],
+          customer: {
+            date_of_birth: "1970-01-01",
+            gender: "male",
+          },
+        },
+        function (res) {
+          console.debug("Klarna Payment Widget loaded:", res);
+        }
+      );
+    } catch (error) {
+      console.error("Error loading Klarna:", error);
+      alert("Klarna failed to load💥", error);
+    }
+  };
+
+  useEffect(() => {
+    if (klarnaClientToken) {
+      loadKlarna();
+    }
+  }, [klarnaClientToken]);
+
   // Function to handle tokenization success
   const requestPayment = async (event, amountValue) => {
     console.log("Triggered");
@@ -106,7 +223,6 @@ export default function PaymentFrameSingle() {
       const paymentResult = await response.json();
       console.log(paymentResult);
 
-
       // If 500
       if (!response.ok) {
         alert(
@@ -115,7 +231,6 @@ export default function PaymentFrameSingle() {
         // handleEnable(); // Re-enable form for resubmission (Otherwise the PAY button wouldn't work)
         return;
       }
-
 
       if (paymentResult.requiresRedirect && paymentResult.redirectLink) {
         // Redirect the user to the 3D Secure page
@@ -258,6 +373,9 @@ export default function PaymentFrameSingle() {
           </button>
         </div>
       </Frames>
+
+      {/* Placeholder for Klarna Payment Widget */}
+      <div id="klarna-payments-container"></div>
 
       <GooglePayBtn />
     </div>

@@ -10,7 +10,7 @@ export async function POST(request, response) {
           type: "klarna",
           account_holder: {
             billing_address: {
-              country: "DE"
+              country: "NL"
             }
           }
         },

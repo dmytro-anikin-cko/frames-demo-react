@@ -6,6 +6,7 @@ import PaymentFrameSingle from "@/components/PaymentFrameSingle";
 import PaymentFrameMultiple from "@/components/PaymentFrameMultiple";
 import OneClickPayment from "@/components/OneClickPayment";
 import VerifyCard from "@/components/VerifyCard";
+import KlarnaPayBtn from "@/components/KlarnaPayBtn";
 
 export default function Home() {
   const [selectedTab, setSelectedTab] = useState(1); // Default to tab 1
@@ -40,6 +41,9 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </section>
+          <section className="my-4 pb-4 border-b-2 border-gray-300">
+            <KlarnaPayBtn />
           </section>
           <section className="oneClick">
             <div className="flex flex-col">

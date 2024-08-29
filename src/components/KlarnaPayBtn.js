@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 export default function KlarnaPayBtn() {
-  const [klarnaClientToken, setKlarnaClientToken] = useState(null);
+
   const [paymentContext, setPaymentContext] = useState(null);
 
   const getPaymentContext = async () => {
@@ -132,7 +132,7 @@ export default function KlarnaPayBtn() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: { id },
+        body: JSON.stringify({ id }),
       });
 
       if (!response.ok) {

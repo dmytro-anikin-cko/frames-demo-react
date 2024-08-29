@@ -29,7 +29,7 @@ export async function POST(request, response) {
     // Send the payment response back to the client
     return NextResponse.json(paymentData);
   } catch (error) {
-    console.log("Error on the server:", error.body);
+    console.log("Error on the server:", error);
     return NextResponse.json({ error: error.body }, { status: 500 });
   }
 }
